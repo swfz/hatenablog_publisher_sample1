@@ -1,6 +1,13 @@
 # Example
 
-このリポジトリは[swfz/hatenablog_publisher: hatenablog publish with imagefile](https://github.com/swfz/hatenablog_publisher) 使用例のサンプルリポジトリです
+このリポジトリは[hatenablog_publisher](https://github.com/swfz/hatenablog_publisher) というGem使用例のサンプルリポジトリです
+
+このGemを使うと下記ができるようになります
+
+- Markdownで書いた記事をはてなブログへ投稿できる
+- コマンドラインからはてなブログへ投稿
+- Markdown内に画像を扱っている場合はその画像をはてなフォトライフへアップロードし専用のリンクを作成した状態で投稿します
+- 記事の状態を持つため記事の更新などを行えます
 
 ## install
 
