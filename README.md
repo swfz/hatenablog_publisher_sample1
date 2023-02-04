@@ -132,3 +132,26 @@ hatenablog_publish --filename contents/sample.md
 | ad_file   |      | あり | 広告のデータファイル                       | --ad_file amazon_url_list.yml              |
 | trace     |      | なし | デバッグモード                             | --trace                                    |
 
+
+## Actionsから投稿する
+
+contents以下のmarkdownファイルに変更があった場合に自動でデプロイできるようなActionsの設定サンプルを用意した
+
+- pull requestで変更があった場合は下書き設定で投稿
+- mainへの変更があった場合は公開設定で投稿
+
+secrets, variablesに下記設定を登録する
+
+### secrets
+- HATENABLOG_ACCESS_TOKEN
+- HATENABLOG_ACCESS_TOKEN_SECRET
+- HATENABLOG_CONSUMER_KEY
+- HATENABLOG_CONSUMER_SECRET
+
+各種OAuthのキー
+
+### variables
+- PUBLISH_SITE
+- PUBLISH_USER
+
+オプション項目での`user`, `site`の値
