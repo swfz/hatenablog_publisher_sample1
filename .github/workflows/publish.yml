@@ -1,0 +1,53 @@
+name: publish
+
+on:
+  pull_request:
+    paths:
+      - contents/**.md
+  push:
+    branches:
+      - main
+    paths:
+      - contents/**.md
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: contents/*.{md,mkd,markdown}
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+
+      - name: publish
+        env:
+          HATENABLOG_CONSUMER_KEY: ${{ secrets.HATENABLOG_CONSUMER_KEY }}
+          HATENABLOG_CONSUMER_SECRET: ${{ secrets.HATENABLOG_CONSUMER_SECRET }}
+          HATENABLOG_ACCESS_TOKEN: ${{ secrets.HATENABLOG_ACCESS_TOKEN }}
+          HATENABLOG_ACCESS_TOKEN_SECRET: ${{ secrets.HATENABLOG_ACCESS_TOKEN_SECRET }}
+          SITE: ${{ vars.PUBLISH_SITE }}
+          USER: ${{ vars.PUBLISH_USER }}
+          BRANCH: ${{ github.head_ref == '' && 'main' || github.head_ref }}
+        run: |
+          gem install hatenablog_publisher
+          git config --global user.email github-actions@github.com
+          git config --global user.name github-actions
+          git switch ${BRANCH}
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            hatenablog_publish --site ${SITE} --user ${USER} --filename $file ${{ github.event_name == 'pull_request' && '--draft' || '' }}
+            git add $file
+          done
+          result=0
+          output=$(git diff --cached --exit-code) || result=$?
+          if [ ! "$result" = 0 ]; then
+            git commit -m 'draft published to hatenablog'
+            git push --set-upstream origin $BRANCH
+          fi
+
