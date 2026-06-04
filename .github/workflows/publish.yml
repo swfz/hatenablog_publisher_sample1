@@ -16,7 +16,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3.3.0
+      - uses: actions/checkout@v6.0.3
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v41
